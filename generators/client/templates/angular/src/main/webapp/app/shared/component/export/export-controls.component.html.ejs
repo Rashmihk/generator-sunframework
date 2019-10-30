@@ -1,0 +1,11 @@
+<div class="btn-group" role="group" aria-label="Export Controls">
+    <button type="button" class="btn btn-secondary border-right" *ngIf="exportOptions.csv" (click)="export(availableExportTypes.CSV)">
+        <i class="fa fa-file"></i> CSV
+    </button>
+    <button type="button" class="btn btn-secondary border-right border-left" *ngIf="exportOptions.xls" (click)="export(availableExportTypes.XLS)">
+        <i class="fa fa-file-excel-o"></i> XLS
+    </button>
+    <button type="button" class="btn btn-secondary border-left" *ngIf="exportOptions.pdf" (click)="export(availableExportTypes.PDF)">
+        <i class="fa fa-file-pdf-o"></i> PDF
+    </button>
+</div>
