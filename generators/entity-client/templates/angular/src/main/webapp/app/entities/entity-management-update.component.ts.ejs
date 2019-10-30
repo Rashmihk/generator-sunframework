@@ -320,7 +320,7 @@ _%>
 
     private onSaveSuccess() {
         this.isSaving = false;
-        if (this.<%= entityInstance %>Form.getRawValue().id !== undefined && this.<%= entityInstance %>Form.getRawValue().id !== '') {
+        if (this.editForm.getRawValue().id !== undefined && this.editForm.getRawValue().id !== '') {
        
         	this.toaster.toast({
             message: 'Updated successfully',
