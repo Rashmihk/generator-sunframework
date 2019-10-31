@@ -23,7 +23,7 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { JhiLanguageHelper } from 'app/core';
 <%_ } _%>
 
-import { <%= angularXAppName %>SharedModule ,PanelModule ,ExportModule} from 'app/shared';
+import { <%= angularXAppName %>SharedModule ,PanelModule ,ExportModule,ModalModule} from 'app/shared';
 import {
     <%= entityAngularName %>Component,
     <%= entityAngularName %>DetailComponent,
@@ -42,7 +42,7 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         <%= angularXAppName %>SharedModule,
-        RouterModule.forChild(ENTITY_STATES),PanelModule,ExportModule
+        RouterModule.forChild(ENTITY_STATES),PanelModule,ExportModule,ModalModule
     ],
     declarations: [
         <%= entityAngularName %>Component,

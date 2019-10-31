@@ -369,6 +369,10 @@ const files = {
                 'shared/component/toaster/toaster.service.ts',
 
                 // models
+                'shared/component/modal/modal.component.ts',
+                'shared/component/modal/modal.component.scss',
+                'shared/component/modal/modal.component.html',
+                'shared/component/modal/modal.module.ts',
                 'shared/util/request-util.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',

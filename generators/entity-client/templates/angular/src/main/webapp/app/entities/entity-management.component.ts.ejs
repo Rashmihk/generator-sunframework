@@ -120,4 +120,11 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
+    closeDeleteModal(deleteModal: any) {
+        deleteModal.close();
+    }
+    
+    openDeleteModal(deleteModal: any) {
+        deleteModal.open();
+    }
 }

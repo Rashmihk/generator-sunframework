@@ -180,9 +180,8 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/<%= entityUrl %>', { outlets: { popup: <%= entityInstance %>.id + '/delete'} }]"
                                 replaceUrl="true"
-                                queryParamsHandling="merge"
+                                queryParamsHandling="merge" (click)="openDeleteModal(deleteModal)"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
@@ -216,4 +215,13 @@
 </fhlbny-panel>   
     <%_ } _%>
 <%_ } _%>
+<sun-modal [headerTitle]="'Delete'" #deleteModal>
+    <div sun-modal-body>
+      <p>You are about to delete this record. Are you sure? </p>
+    </div>
+    <div sun-modal-footer>
+      <button type="button" class="btn btn-danger" (click)="delete()" id="btn_confirm_delete">Delete</button>
+      <button type="button" class="btn btn-primary" class="button"  (click)="closeDeleteModal(deleteModal)" id="btn_confirm_cancels">Cancel</button>
+    </div>
+  </sun-modal>
 </div>
