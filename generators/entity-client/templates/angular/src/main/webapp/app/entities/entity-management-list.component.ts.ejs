@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { QueryParamsStateService } from 'app/shared/util/query-params-state';
+import { ObservableUnsubscriptionUtilities } from 'app/shared/util/observable-unsubscription-utils';
 import { HttpErrorResponse, <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,17 +33,35 @@ import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { AccountService } from 'app/core';
 <%_ if (pagination !== 'no') { %>
-import {ExportType} from 'app/shared'
+import {ExportType,PageData} from 'app/shared'
 import { ITEMS_PER_PAGE } from 'app/shared';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { ExportType } from 'app/shared';
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>-list.component.html'
 })
 export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy {
     breadcrumb: object = {};
+    // A reference of page size selection form
+    public pageSizeSelectionForm: FormGroup;
+    // Stores the list screen specific search object.
+    public searchObject: object;
+    public pageData: PageData = {
+    currentPage: 0,
+    totalPages: 0,
+    totalItems: 0,
+    itemsPerPage: ITEMS_PER_PAGE,
+    numItemsOnCurrentPage: 0
+    };
+    public readonly availablePageSizes: number[] = [
+    10,
+    20,
+    30,
+    40,
+    50
+    ];
+
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 <%- include('pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } else if (pagination === 'infinite-scroll') { _%>
@@ -48,6 +69,8 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
     <%_ } else if (pagination === 'no') { _%>
 <%- include('no-pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } _%>
+
+    
 
     ngOnInit() {
         this.breadcrumb = {
@@ -60,6 +83,32 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
             this.currentAccount = account;
         });
         this.registerChangeIn<%= entityClassPlural %>();
+        this.pageSizeSelectionForm = this.formBuilder.group({
+            pageSizeSelector: [this.pageData.itemsPerPage]
+        });
+        this.pageSizeSelectionForm.get('pageSizeSelector').valueChanges.pipe(ObservableUnsubscriptionUtilities.untilComponentDestroyed(this)).subscribe(
+      (pageSize: number) => {
+          this.onPageSizeChange(pageSize);
+      });
+    }
+
+    onPageSizeChange(itemsPerPage: number) {
+    this.pageData.itemsPerPage = itemsPerPage;
+    // Reset the page number back to 0 to avoid having no records to show
+    this.pageData.currentPage = 0;
+    this.changeStateParams();
+    this.loadAll();
+    }
+
+    /**
+    * Creates object that will be served as input to createQueryParamsForCurrentUrl
+    */
+    changeStateParams() {
+      if (this.searchObject !== undefined) {
+          QueryParamsStateService.setQueryParams(this.activatedRoute, this.router, this.pageData,  this.searchObject);
+      } else {
+          QueryParamsStateService.setQueryParams(this.activatedRoute, this.router, this.pageData);
+      }
     }
 
     ngOnDestroy() {
@@ -67,7 +116,6 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
     }
 
     onExportClicked(exportType: ExportType, ) {
-        console.log("export button"+ exportType)
     }
 
     trackId(index: number, item: I<%= entityAngularName %>) {

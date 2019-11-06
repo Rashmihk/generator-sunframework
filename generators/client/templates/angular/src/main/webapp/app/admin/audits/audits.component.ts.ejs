@@ -21,8 +21,9 @@ import { HttpResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { ITEMS_PER_PAGE } from 'app/shared';
+import { ITEMS_PER_PAGE, PageData } from 'app/shared';
 import { Audit } from './audit.model';
 import { AuditsService } from './audits.service';
 
@@ -42,8 +43,16 @@ export class AuditsComponent implements OnInit, OnDestroy {
     reverse: boolean;
     toDate: string;
     totalItems: number;
+    public pageData: PageData = {
+        currentPage: 0,
+        totalPages: 0,
+        totalItems: 0,
+        itemsPerPage: ITEMS_PER_PAGE,
+        numItemsOnCurrentPage: 0
+      };
 
     constructor(
+        private formBuilder: FormBuilder,
         private auditsService: AuditsService,
         private alertService: JhiAlertService,
         private parseLinks: JhiParseLinks,
@@ -95,7 +104,7 @@ export class AuditsComponent implements OnInit, OnDestroy {
     loadAll() {
         this.auditsService.query({
             page: this.page - 1,
-            size: this.itemsPerPage,
+            size: this.pageData.itemsPerPage,
             sort: this.sort(),
             fromDate: this.fromDate,
             toDate: this.toDate}).subscribe(

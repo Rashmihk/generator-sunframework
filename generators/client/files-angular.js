@@ -389,6 +389,19 @@ const files = {
                 'shared/component/form/form.component.ts',
                 'shared/component/form/form.module.ts',
                 'shared/component/form/form.model.ts',
+                 // pagination 
+                 'shared/component/pagination/index.ts',
+                 'shared/component/pagination/page-data.model.ts',
+                 'shared/component/pagination/page-size-selector.component.html',
+                 'shared/component/pagination/page-size-selector.component.ts',
+                 'shared/component/pagination/pagination.component.html',
+                 'shared/component/pagination/pagination.component.ts',
+                 'shared/component/pagination/pagination.module.ts',
+                 // util
+                 'shared/util/observable-unsubscription-utils.ts',
+                 'shared/util/query-params-state/index.ts',
+                 'shared/util/query-params-state/query-params-state.ts',
+                 'shared/util/query-params-state/state-param.model.ts',
             ]
         },
         {
