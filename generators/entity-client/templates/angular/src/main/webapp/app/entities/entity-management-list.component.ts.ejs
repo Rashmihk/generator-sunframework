@@ -34,12 +34,13 @@ import {ExportType} from 'app/shared'
 import { ITEMS_PER_PAGE } from 'app/shared';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-
+import { ExportType } from 'app/shared';
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
-    templateUrl: './<%= entityFileName %>.component.html'
+    templateUrl: './<%= entityFileName %>-list.component.html'
 })
-export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
+export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy {
+    breadcrumb: object = {};
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 <%- include('pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } else if (pagination === 'infinite-scroll') { _%>
@@ -120,11 +121,14 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
-    closeDeleteModal(deleteModal: any) {
-        deleteModal.close();
-    }
-    
-    openDeleteModal(deleteModal: any) {
-        deleteModal.open();
+    reLoad() {
+        <!-- this.resetSearchFilter();
+        this.sortConfig = {
+            ascending: true,
+            callback: this.reset.bind(this),
+            predicate: 'id'
+        };
+        this.searchObject = this.getSearchObject();
+        this.reLoadPage(); -->
     }
 }

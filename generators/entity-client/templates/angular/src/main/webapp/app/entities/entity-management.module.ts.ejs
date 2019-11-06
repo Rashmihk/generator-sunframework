@@ -23,39 +23,28 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { JhiLanguageHelper } from 'app/core';
 <%_ } _%>
 
-import { <%= angularXAppName %>SharedModule ,PanelModule ,ExportModule,ModalModule} from 'app/shared';
+import { <%= angularXAppName %>SharedModule ,PanelModule ,ExportModule,ModalModule, FormModule} from 'app/shared';
 import {
-    <%= entityAngularName %>Component,
-    <%= entityAngularName %>DetailComponent,
+    <%= entityAngularName %>ListComponent,
     <%= entityAngularName %>UpdateComponent,
-    <%= entityAngularName %>DeletePopupComponent,
-    <%= entityAngularName %>DeleteDialogComponent,
-    <%= entityInstance %>Route,
-    <%= entityInstance %>PopupRoute
+    <%= entityInstance %>Route
 } from './';
 
 const ENTITY_STATES = [
-    ...<%= entityInstance %>Route,
-    ...<%= entityInstance %>PopupRoute,
+    ...<%= entityInstance %>Route
 ];
-
 @NgModule({
     imports: [
         <%= angularXAppName %>SharedModule,
-        RouterModule.forChild(ENTITY_STATES),PanelModule,ExportModule,ModalModule
+        RouterModule.forChild(ENTITY_STATES),PanelModule,ExportModule,ModalModule, FormModule
     ],
     declarations: [
-        <%= entityAngularName %>Component,
-        <%= entityAngularName %>DetailComponent,
+        <%= entityAngularName %>ListComponent,
         <%= entityAngularName %>UpdateComponent,
-        <%= entityAngularName %>DeleteDialogComponent,
-        <%= entityAngularName %>DeletePopupComponent,
     ],
     entryComponents: [
-        <%= entityAngularName %>Component,
+        <%= entityAngularName %>ListComponent,
         <%= entityAngularName %>UpdateComponent,
-        <%= entityAngularName %>DeleteDialogComponent,
-        <%= entityAngularName %>DeletePopupComponent,
     ],
     <%_ if (enableTranslation) { _%>
     providers: [ { provide: JhiLanguageService, useClass: JhiLanguageService } ],

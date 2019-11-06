@@ -160,7 +160,7 @@ const files = {
                 { file: 'layouts/footer/footer.component.html', method: 'processHtml' },
                 { file: 'layouts/error/error.route.ts', method: 'processJs' },
                 { file: 'layouts/error/error.component.ts', method: 'processJs' },
-                { file: 'layouts/error/error.component.html', method: 'processHtml' }
+                { file: 'layouts/error/error.component.html', method: 'processHtml' },
             ]
         },
         {
@@ -378,7 +378,12 @@ const files = {
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert-error.component.ts',
                 // dates
-                'shared/util/datepicker-adapter.ts'
+                'shared/util/datepicker-adapter.ts',
+                // form
+                'shared/component/form/form.component.html',
+                'shared/component/form/form.component.ts',
+                'shared/component/form/form.module.ts',
+                'shared/component/form/form.model.ts',
             ]
         },
         {

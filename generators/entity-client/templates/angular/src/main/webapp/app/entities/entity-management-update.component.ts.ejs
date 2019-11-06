@@ -67,13 +67,13 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= 
         }
     }
 }); _%>
-
+import { FormType } from 'app/shared';
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
     templateUrl: './<%= entityFileName %>-update.component.html'
 })
 export class <%= entityAngularName %>UpdateComponent implements OnInit {
-
+    breadcrumb: object = {};
     isSaving: boolean;
     <%= entityInstance %>Form : FormGroup;
 <%_
@@ -87,7 +87,9 @@ for ( const idx in variables ) { %>
     <%= fieldName %>Dp: any;
         <%_ } _%>
 <%_ } _%>
-
+formType: FormType;
+<%= entityInstance %>: <%= entityAngularName %>;
+panelTitle: String = '';
     editForm = this.fb.group({
         id: [],
 <%_ for (idx in fields) {
@@ -152,12 +154,27 @@ for ( const idx in variables ) { %>
         private fb: FormBuilder,
         private toaster: ToasterService
     ) {
+        this.formType = FormType.add;
     }
 
     ngOnInit() {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
+            if (<%= entityInstance %>['id']) {
+            this.formType = FormType.update;    
             this.updateForm(<%= entityInstance %>);
+            this.panelTitle = 'Edit <%= entityAngularName %>';
+            this.breadcrumb = {
+                home: 'Home',
+                menu: 'Entities',
+                entity: '<%= entityUrl %>',
+                entityEdit: 'Edit',
+                entityUrl: '<%= entityUrl %>'
+            };
+        } else {
+            this.<%= entityInstance %> = new <%= entityAngularName %>();
+            this.panelTitle = 'Add <%= entityAngularName %>'; 
+          }
         });
 <%_ for (idx in queries) { _%>
         <%- queries[idx] %>
@@ -259,7 +276,7 @@ _%>
     save() {
         this.isSaving = true;
         const <%= entityInstance %> = this.createFromForm();
-        if (<%= entityInstance %>.id !== undefined) {
+        if (<%= entityInstance %>.id !== undefined && <%= entityInstance %>.id !== null) {
             this.subscribeToSaveResponse(
                 this.<%= entityInstance %>Service.update(<%= entityInstance %>));
         } else {
@@ -320,7 +337,7 @@ _%>
 
     private onSaveSuccess() {
         this.isSaving = false;
-        if (this.editForm.getRawValue().id !== undefined && this.editForm.getRawValue().id !== '') {
+        if (this.editForm.getRawValue().id !== undefined && this.editForm.getRawValue().id !== null) {
        
         	this.toaster.toast({
             message: 'Updated successfully',
@@ -370,4 +387,11 @@ _%>
         return option;
     }
 <%_ } _%>
+closeDeleteModal(deleteModal: any) {
+    deleteModal.close();
+}
+
+openDeleteModal(deleteModal: any) {
+    deleteModal.open();
+}
 }
