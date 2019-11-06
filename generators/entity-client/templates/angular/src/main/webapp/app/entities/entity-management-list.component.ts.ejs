@@ -121,14 +121,4 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
     protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
-    reLoad() {
-        <!-- this.resetSearchFilter();
-        this.sortConfig = {
-            ascending: true,
-            callback: this.reset.bind(this),
-            predicate: 'id'
-        };
-        this.searchObject = this.getSearchObject();
-        this.reLoadPage(); -->
-    }
 }
