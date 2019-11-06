@@ -173,7 +173,14 @@ panelTitle: String = '';
             };
         } else {
             this.<%= entityInstance %> = new <%= entityAngularName %>();
-            this.panelTitle = 'Add <%= entityAngularName %>'; 
+            this.panelTitle = 'Add <%= entityAngularName %>';
+            this.breadcrumb = {
+                home: 'Home',
+                menu: 'Entities',
+                entity: '<%= entityUrl %>',
+                entityEdit: 'Add',
+                entityUrl: '<%= entityUrl %>'
+            }; 
           }
         });
 <%_ for (idx in queries) { _%>

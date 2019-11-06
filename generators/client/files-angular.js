@@ -161,6 +161,11 @@ const files = {
                 { file: 'layouts/error/error.route.ts', method: 'processJs' },
                 { file: 'layouts/error/error.component.ts', method: 'processJs' },
                 { file: 'layouts/error/error.component.html', method: 'processHtml' },
+                //breadcrumb
+                { file: 'layouts/breadcrumb/breadcrumb.component.html', method: 'processHtml' },
+                { file: 'layouts/breadcrumb/breadcrumb.component.ts', method: 'processJs' },
+                { file: 'layouts/breadcrumb/breadcrumb.model.ts', method: 'processJs' },
+                { file: 'layouts/breadcrumb/breadcrumb.module.ts', method: 'processJs' },
             ]
         },
         {

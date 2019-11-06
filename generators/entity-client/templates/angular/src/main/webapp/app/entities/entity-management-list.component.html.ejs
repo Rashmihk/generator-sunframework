@@ -16,16 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<div>
-    <!-- <h2 id="page-heading">
-        <span jhiTranslate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span <% if (searchEngine === 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
-            Create a new <%= entityClassHumanized %>
-            </span>
-        </button>
-    </h2> -->
+<fhlbny-breadcrumb [breadcrumbData]="breadcrumb"></fhlbny-breadcrumb>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <div class="row">
         <div class="col-sm-12">
@@ -43,10 +34,6 @@
         </div>
     </div>
     <%_ } _%>
-    <br/>
-    <div class="alert alert-warning" *ngIf="<%=entityInstancePlural %>?.length === 0">
-        <span jhiTranslate="<%= i18nKeyPrefix %>.home.notFound">No <%=entityInstancePlural %> found</span>
-    </div>
     <%# Added this div which contains export buttons and title -%>
     <%# Modified background color by adding class bg-white -%>
 

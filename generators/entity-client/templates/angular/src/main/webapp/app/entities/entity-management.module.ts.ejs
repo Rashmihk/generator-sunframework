@@ -29,14 +29,19 @@ import {
     <%= entityAngularName %>UpdateComponent,
     <%= entityInstance %>Route
 } from './';
-
+import { BreadcrumbModule } from 'app/layouts';
 const ENTITY_STATES = [
     ...<%= entityInstance %>Route
 ];
 @NgModule({
     imports: [
         <%= angularXAppName %>SharedModule,
-        RouterModule.forChild(ENTITY_STATES),PanelModule,ExportModule,ModalModule, FormModule
+        RouterModule.forChild(ENTITY_STATES), 
+        PanelModule, 
+        ExportModule, 
+        ModalModule, 
+        FormModule, 
+        BreadcrumbModule
     ],
     declarations: [
         <%= entityAngularName %>ListComponent,
