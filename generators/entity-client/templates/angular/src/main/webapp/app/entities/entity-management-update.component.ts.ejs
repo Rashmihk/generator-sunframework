@@ -67,7 +67,7 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= 
         }
     }
 }); _%>
-import { FormType } from 'app/shared';
+import { FormType,SpinnerService } from 'app/shared';
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
     templateUrl: './<%= entityFileName %>-update.component.html'
@@ -152,7 +152,8 @@ panelTitle: String = '';
 <%_ } _%>
         protected activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private spinner: SpinnerService
     ) {
         this.formType = FormType.add;
     }
@@ -338,11 +339,13 @@ _%>
     }
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>) {
+            this.spinner.spin(true);
         result.subscribe(() =>
             this.onSaveSuccess(), () => this.onSaveError());
     }
 
     private onSaveSuccess() {
+        this.spinner.spin(false);
         this.isSaving = false;
         if (this.editForm.getRawValue().id !== undefined && this.editForm.getRawValue().id !== null) {
        
@@ -363,6 +366,7 @@ _%>
     }
 
     protected onSaveError() {
+        this.spinner.spin(false);
         this.isSaving = false;
     }
 <%_ if (fieldsContainBlob || queries && queries.length > 0) { _%>

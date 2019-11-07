@@ -402,6 +402,13 @@ const files = {
                  'shared/util/query-params-state/index.ts',
                  'shared/util/query-params-state/query-params-state.ts',
                  'shared/util/query-params-state/state-param.model.ts',
+                 // spinner
+                 'shared/component/spinner/index.ts',
+                 'shared/component/spinner/spinner.component.html',
+                 'shared/component/spinner/spinner.component.scss',
+                 'shared/component/spinner/spinner.component.ts',
+                 'shared/component/spinner/spinner.module.ts',
+                 'shared/component/spinner/spinner.service.ts',
             ]
         },
         {
