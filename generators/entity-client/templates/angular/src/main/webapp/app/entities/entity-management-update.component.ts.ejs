@@ -25,7 +25,7 @@ _%>
 import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 <%_ if (queries && queries.length > 0) { _%>
 import { filter, map } from 'rxjs/operators';
@@ -153,7 +153,8 @@ panelTitle: String = '';
         protected activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
         private toaster: ToasterService,
-        private spinner: SpinnerService
+        private spinner: SpinnerService,
+        private router: Router
     ) {
         this.formType = FormType.add;
     }
@@ -343,7 +344,38 @@ _%>
         result.subscribe(() =>
             this.onSaveSuccess(), () => this.onSaveError());
     }
-
+    delete() {
+        if (this.editForm.getRawValue().id !== undefined && this.editForm.getRawValue().id !== '') {
+            this.subscribeToDeleteResponse(
+                this.<%= entityInstance %>Service.delete(this.editForm.getRawValue().id));
+        } else {
+            this.onError('Error');
+        }
+    }
+    private subscribeToDeleteResponse(result: Observable<HttpResponse<<%= entityAngularName %>>>) {
+      result.subscribe((res: HttpResponse<<%= entityAngularName %>>) =>
+          this.onDeleteSuccess(res.body), (res: HttpErrorResponse) => this.onError('Error'));
+    }
+    private onError(error: any) {
+      this.spinner.spin(false);
+      this.toaster.toast({
+          message: error,
+          type: ToasterType.Error,
+          title: ToasterTitle.Error
+      });
+      this.isSaving = false;
+    }
+    private onDeleteSuccess(result: <%= entityAngularName %>) {
+        this.isSaving = false;
+        this.toaster.toast({
+      
+            message: 'Deleted successfully',
+            type: ToasterType.Success,
+            title: ToasterTitle.Success
+      
+        });
+        this.router.navigate(['<%= entityUrl %>']);
+      }
     private onSaveSuccess() {
         this.spinner.spin(false);
         this.isSaving = false;
