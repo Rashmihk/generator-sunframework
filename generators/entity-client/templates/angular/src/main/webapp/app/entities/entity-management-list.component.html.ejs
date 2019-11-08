@@ -40,7 +40,7 @@
     <fhlbny-panel headerTitle="<%= entityClassHumanized %>">
             <ng-template #additionalHeaderContent>
                     <div class="d-flex">
-                        <form class="form-inline mr-2" [formGroup]="pageSizeSelectionForm">
+                        <form class="d-none d-lg-block form-inline mr-2" [formGroup]="pageSizeSelectionForm">
                             Show
                             <select [compareWith]="compareFn" class="form-control form-control-sm mx-2" id="sel_pageSize" formControlName="pageSizeSelector">
                                 <option *ngFor="let pageSize of availablePageSizes" [ngValue]="pageSize">{{pageSize}}</option>
@@ -48,12 +48,20 @@
                             entries
                         </form>
                         <fhlbny-export-controls (onExport)="onExportClicked($event)"></fhlbny-export-controls>
-                        <div class="ml-2">
+                        <div class="d-none d-lg-block ml-2">
                             <button type="button" id="btn_refresh" class="btn btn-secondary" (click)="reset()">
-                                <i class="fa fa-refresh"></i> Refresh
+                                <fa-icon [icon]="'sync'"></fa-icon> Refresh
                             </button>
                             <button type="button" id="btn_add" class="btn btn-secondary" [routerLink]="['../<%= entityUrl %>/<%= entityUrl %>-new']">
-                                <i class="fa fa-plus"></i> Add
+                                <fa-icon [icon]="'plus'"></fa-icon> Add
+                            </button>
+                        </div>
+                        <div class="d-block d-lg-none ml-2">
+                            <button  class="border-right border-left" type="button" id="btn_refresh" (click)="reset()">
+                                <fa-icon [icon]="'sync'"></fa-icon>
+                            </button>
+                            <button class="border-left" type="button" id="btn_add"  [routerLink]="['../<%= entityUrl %>/<%= entityUrl %>-new']">
+                                <fa-icon [icon]="'plus'"></fa-icon>
                             </button>
                         </div>
                     </div>
