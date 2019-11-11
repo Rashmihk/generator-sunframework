@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service;
+import org.springframework.data.jpa.domain.Specification;
 <%  const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
     const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance); %>
 <%_ if (dto === 'mapstruct') { _%>
@@ -45,6 +46,61 @@ import java.util.UUID;
  * Service Interface for managing {@link <% if (dto === 'mapstruct') { %><%= packageName %>.domain.<% } %><%= asEntity(entityClass) %>}.
  */
 public interface <%= entityClass %>Service {
+
+    @Transactional(readOnly = true)
+    public List<<%= instanceType %>> findByCriteria(<%= criteria %> criteria) {
+        log.debug("find by criteria : {}", criteria);
+        final Specifications<<%= entityClass %>> specification = createSpecification(criteria);
+    <%_ if (dto === 'mapstruct') { _%>
+        return <%= entityListToDto %>(<%= repository %>.findAll(specification));
+    <%_ } else { _%>
+        return <%= repository %>.findAll(specification);
+    <%_ } _%>
+    }
+
+    private Specification<<%= entityClass %>> createSpecification(<%= criteria %> criteria) {
+        Specification<<%= entityClass %>> specification = Specification.where(null);
+        if (criteria != null) {
+            if (criteria.getId() != null) {
+                specification = specification.and(buildSpecification(criteria.getId(), <%= entityClass %>_.id));
+            }
+            <%_
+            fields.forEach((field) => {
+                if (isFilterableType(field.fieldType)) { _%>
+            if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
+                specification = specification.and(<%= getSpecificationBuilder(field.fieldType) %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= entityClass %>_.<%= field.fieldName %>));
+            }
+            <%_ }
+            });
+
+            relationships.forEach((relationship) => {
+                const metamodelFieldName = (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
+            if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(), <%= entityClass %>_.<%= metamodelFieldName %>, <%= relationship.otherEntityNameCapitalized %>_.id));
+            }
+            <%_ }); // forEach
+        _%>
+        }
+        return specification;
+    }
+
+    /**
+     * Return a {@link Page} of {@link <%= instanceType %>} which matches the criteria from the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<<%= instanceType %>> findByCriteria(<%= criteria %> criteria, Pageable page) {
+        log.debug("find by criteria : {}, page: {}", criteria, page);
+        final Specifications<<%= entityClass %>> specification = createSpecification(criteria);
+    <%_ if (dto === 'mapstruct') { _%>
+        final Page<<%= entityClass %>> result = <%= repository %>.findAll(specification, page);
+        return result.map(<%= entityToDtoReference %>);
+    <%_ } else { _%>
+        return <%= repository %>.findAll(specification, page);
+    <%_ } _%>
+    }
 
     /**
      * Save a <%= entityInstance %>.
@@ -111,4 +167,7 @@ public interface <%= entityClass %>Service {
      * @return the list of entities.
      */
     <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);<% } %>
+    
+
+    
 }

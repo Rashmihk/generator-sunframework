@@ -45,8 +45,7 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
     breadcrumb: object = {};
     // A reference of page size selection form
     public pageSizeSelectionForm: FormGroup;
-    // Stores the list screen specific search object.
-    public searchObject: object;
+    public searchFilterForm: FormGroup;
     public pageData: PageData = {
     currentPage: 0,
     totalPages: 0,
@@ -82,7 +81,6 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
         this.accountService.identity().then((account) => {
             this.currentAccount = account;
         });
-        this.registerChangeIn<%= entityClassPlural %>();
         this.pageSizeSelectionForm = this.formBuilder.group({
             pageSizeSelector: [this.pageData.itemsPerPage]
         });
@@ -90,6 +88,20 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
       (pageSize: number) => {
           this.onPageSizeChange(pageSize);
       });
+      this.searchFilterForm = this.formBuilder.group({
+        'id': [''],
+        <%_ for (idx in fields) {
+            const fieldName = fields[idx].fieldName;
+            const count = parseInt(idx) + 1;
+            const fieldType = fields[idx].fieldType;_%>
+        <%_ if (fieldType === 'LocalDate' || ['Instant', 'ZonedDateTime'].includes(fieldType)) { _%> 
+            '<%= fieldName %>': [''],
+        <%_ } else { _%> 
+            '<%= fieldName %>': [''],
+            <%_ } _%> 
+        <%_ } _%>
+    });
+      this.registerChangeIn<%= entityClassPlural %>();
     }
 
     onPageSizeChange(itemsPerPage: number) {
@@ -173,5 +185,65 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
 
     protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
+    }
+    onSearchSubmit(searchObject: object) {
+        this.pageData.currentPage = 0;
+        this.searchObject = this.getSearchObject();
+        this.changeStateParams();
+        this.loadAll();
+    }
+    public resetSearchFilter() {
+        this.searchFilterForm.patchValue({
+            'id': '',
+            <%_ for (idx in fields) {
+                const fieldName = fields[idx].fieldName;
+                const fieldType = fields[idx].fieldType;_%>
+            <%_ if (fieldType === 'LocalDate' || ['Instant', 'ZonedDateTime'].includes(fieldType)) { _%> 
+                '<%= fieldName %>': null,
+            <%_ } else { _%> 
+                '<%= fieldName %>': '',
+                <%_ } _%> 
+            <%_ } _%>
+        });
+        this.getSearchObject();
+    }
+    reLoad() { 
+        this.searchObject = this.getSearchObject();
+    }
+    public getSearchObject(): object {
+        const searchObject: any = {};
+        if (this.searchFilterForm.value['id']) {
+            searchObject[`id.equals`] = this.searchFilterForm.value['id'];
+        }
+        <%_ for (idx in fields) {
+            const fieldName = fields[idx].fieldName;
+            const fieldType = fields[idx].fieldType;_%>
+        <%_ if (fieldType === 'LocalDate') { _%> 
+        if (this.searchFilterForm.value['<%= fieldName %>']) {
+            searchObject[`<%= fieldName %>.equals`] = this.jhiDateUtils.convertLocalDateToServer(this.searchFilterForm.value['<%= fieldName %>']);
+        }
+        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+        if (this.searchFilterForm.value['<%= fieldName %>']) {
+            searchObject[`<%= fieldName %>.equals`] = this.dateUtils.toIsoString(this.searchFilterForm.value['<%= fieldName %>']);
+        }
+        <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+        if (this.searchFilterForm.value['<%= fieldName %>']) {
+            searchObject[`<%= fieldName %>.equals`] = this.searchFilterForm.value['<%= fieldName %>'];
+        }
+        <%_ } else if (fieldType === 'Boolean') { _%>
+            if (this.searchFilterForm.value['<%= fieldName %>'].trim()) {
+                if ( this.searchFilterForm.value['<%= fieldName %>'].trim() === 'true') {
+                    searchObject[`<%= fieldName %>.equals`] = 1 ;
+                }else if (this.searchFilterForm.value['<%= fieldName %>'].trim() === 'false') {
+                    searchObject[`<%= fieldName %>.equals`] = 0 ;
+                }
+            }
+        <%_ } else { _%> 
+        if (this.searchFilterForm.value['<%= fieldName %>'].trim()) {
+            searchObject[`<%= fieldName %>.contains`] = this.searchFilterForm.value['<%= fieldName %>'].trim();
+        }
+        <%_ } _%> 
+        <%_ } _%>
+        return searchObject;
     }
 }

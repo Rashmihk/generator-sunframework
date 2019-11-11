@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<fhlbny-breadcrumb [breadcrumbData]="breadcrumb"></fhlbny-breadcrumb>
+<fhlbny-breadcrumb [breadcrumbData]="breadcrumb" (refreshCurrentRoute)="reLoad()"></fhlbny-breadcrumb>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <div class="row">
         <div class="col-sm-12">
@@ -141,3 +141,54 @@
     <%_ } _%>
 <%_ } _%>
 </div>
+<form [formGroup]="searchFilterForm" (ngSubmit)="onSearchSubmit($event)">
+    <fhlbny-panel headerTitle="Search Controls">
+        <div class="form-group row">
+            <div class="col-lg-3 col-md-4 col-sm-6 d-none">
+                <label for="id" class="col-form-label font-weight-bold">
+                    Id
+                </label>
+                <div class="input-group">
+                    <input id="field_id" name="id" class="form-control form-control-sm" formControlName="id" type="number" placeholder="Enter Id" />
+                </div>
+            </div>
+            <%_ for (idx in fields) {
+                const fieldName = fields[idx].fieldName;
+                const fieldType = fields[idx].fieldType;_%>
+            <%_ if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) { _%> 
+                <div class="col-lg-3 col-md-4 col-sm-6" #<%= fieldName %>Container>
+                    <label for="<%= fieldName %>" class="col-form-label font-weight-bold">
+                        <%= fieldName %>
+                    </label>
+                <div class="input-group">
+                    <input id="field_<%= fieldName %>" type="text" class="form-control" formControlName="<%= fieldName %>" ngbDatepicker  #date_<%= fieldName %>Dp="ngbDatepicker" />
+                    <span class="input-group-append">
+                        <button type="button" class="btn btn-secondary" (click)="date_<%= fieldName %>Dp.toggle()"><i class="fa fa-calendar"></i></button>
+                    </span>
+                </div>
+                </div>
+            <%_ } else { _%> 
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <label for="<%= fieldName %>" class="col-form-label font-weight-bold">
+                        <%= fieldName %>
+                    </label>
+                    <div class="input-group">
+                        <input id="field_<%= fieldName %>" name="<%= fieldName %>" class="form-control form-control-sm" formControlName="<%= fieldName %>" type="text" placeholder="Enter <%= fieldName %>"
+                        />
+                    </div>
+                </div>
+            <%_ } _%> 
+            <%_ } _%>
+        </div>
+        <div class="form-group row mb-0">
+            <div class="col-sm-12 text-right">
+                <button id="btn_search"  class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i> Search
+                </button>
+                <button id="btn_reset" class="btn btn-secondary" (click)="resetSearchFilter()">
+                    Reset
+                </button>
+            </div>
+        </div>
+    </fhlbny-panel>
+</form>

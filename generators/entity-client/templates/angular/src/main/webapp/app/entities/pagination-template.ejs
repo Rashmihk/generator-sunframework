@@ -21,6 +21,7 @@
     error: any;
     success: any;
     eventSubscriber: Subscription;
+    public searchObject: object;
     <%_ if (searchEngine === 'elasticsearch') { _%>
     currentSearch: string;
     <%_ } _%>
@@ -80,7 +81,9 @@
         this.<%= entityInstance %>Service.query(<%_ if (databaseType !== 'cassandra') { _%>{
             page: this.page - 1,
             size: this.pageData.itemsPerPage,
-            sort: this.sort()}<%_ } _%>).subscribe(
+            sort: this.sort(),
+            ...this.searchObject
+        }<%_ } _%>).subscribe(
                 (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
         );
