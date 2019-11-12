@@ -21,7 +21,6 @@ export class QueryParamsStateService {
      * A static method to convert object to query parmas and sets it in the current url.
      */
     public static setQueryParams(activatedRoute: ActivatedRoute, router: Router, pageData: PageData,  searchObject?: any) {
-        console.log('inside setQueryParams' + pageData.itemsPerPage );
         const stateParams: StateParam = {
             itemsPerPage: pageData.itemsPerPage,
             page: pageData.currentPage

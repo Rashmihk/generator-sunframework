@@ -138,7 +138,6 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
     onExportClick(exportType: ExportType, reportName: string) {
         // const { currentPage, itemsPerPage } = this.pageData;
          //this.spinner.spin(true);
-         console.log("inside export"+exportType);
          this.<%= entityInstance %>Service.exportReport(exportType).pipe(ObservableUnsubscriptionUtilities.untilComponentDestroyed(this)).subscribe((file) => {
              FileSaver.saveAs(new Blob([file.body], { type: exportType.toLowerCase() }), reportName + (exportType === 'XLS' ? 'xlsx' : exportType.toLowerCase()));
              //this.spinner.spin(false);
