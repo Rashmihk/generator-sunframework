@@ -20,6 +20,21 @@ package <%=packageName%>.web.rest;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import <%=packageName%>.common.ReportGenerator;
+import <%=packageName%>.common.FileOperation;
+import <%=packageName%>.common.ReportFileType;
+import org.springframework.core.io.InputStreamResource;
+import java.io.FileNotFoundException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 <%_ const viaService = service !== 'no';
     let isUsingMapsId = false;
@@ -132,7 +147,7 @@ public class <%= entityClass %>Resource {
     <%_
     const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
     const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
-    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
+    _%><%- include('../../common/inject_resource_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
 
     /**
      * {@code POST  /<%= entityApiUrl %>} : Create a new <%= entityInstance %>.
@@ -268,4 +283,14 @@ public class <%= entityClass %>Resource {
      * @return the result of the search.
      */
     @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {asEntity, asDto, viaService}); -%><% } %>
+
+    public static Map<String, String> get<%= entityClass %>ReportHeader() {
+        Map<String, String> reportHeaders = new LinkedHashMap<>();
+        <%_ for (idx in fields) {
+            const fieldName = fields[idx].fieldName;
+            const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
+            reportHeaders.put("<%= fieldName %>","<%= fieldInJavaBeanMethod %>");
+        <%_ } _%>
+        return reportHeaders;
+    }
 }

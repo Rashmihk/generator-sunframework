@@ -23,19 +23,53 @@
     const entityListToDtoListReference = mapper + '.' + 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
     if (jpaMetamodelFiltering) {  %>
-    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>, Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>) {
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>, Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>,@RequestParam(value = "exportType", required = false) String exportType) {
         log.debug("REST request to get <%= entityClassPlural %> by criteria: {}", criteria);
     <%_ if (pagination === 'no') { _%>
         List<<%= instanceType %>> entityList = <%= entityInstance %>QueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
     <%_ } else { _%>
+        if(exportType==null) {
         PageRequest pageRequest;
         Sort.Order order = new Sort.Order(pageable.getSort().iterator().next().getDirection(),pageable.getSort().iterator().next().getProperty()).ignoreCase();
         pageRequest = new PageRequest(pageable.getPageNumber(), pageable.getPageSize(), new Sort(order));
         Page<<%= instanceType %>> page = <%= entityInstance %>QueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+        }
+        else{
+           
+        List<String> excludedHeader = new ArrayList<>();
+			excludedHeader.add("id");
+			Date date = Calendar.getInstance().getTime();
+			DateFormat dateFormat = new SimpleDateFormat("hhmmssSSS");
+			String strDate = dateFormat.format(date);
+			String fileName = "Demo_"+strDate;
 
+			List<<%= instanceType %>> <%= entityInstance %>List = <%= entityInstance %>QueryService.findByCriteria(criteria);
+
+			ReportFileType  report = reportGenerator.generateListingReport(
+                <%= entityInstance %>List,
+					exportType,
+					get<%= entityClass %>ReportHeader(),
+					"<%= entityClass %>",
+					"<%= entityClass %>",
+					"<%= entityClass %> Report",
+					excludedHeader,
+					null);           
+			if(report.getReportFile().exists()){
+				FileOperation inputStream;
+				try {
+					inputStream = new FileOperation(report.getReportFile());
+					return new ResponseEntity(new InputStreamResource(inputStream), report.getHttpHeader(),
+							HttpStatus.OK);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} 
+        }
+        return null;
     <%_ } _%>
     }
 

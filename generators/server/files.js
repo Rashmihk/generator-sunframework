@@ -48,6 +48,78 @@ const serverFiles = {
             templates: ['package.json']
         }
     ],
+
+    serverCommon: [
+    {
+        path: SERVER_MAIN_SRC_DIR,
+        templates: [
+
+            {
+                file: 'package/common/Constants.java',
+                renameTo: generator => `${generator.javaDir}common/Constants.java`
+            },
+            {
+                file: 'package/common/CreateXML.java',
+                renameTo: generator => `${generator.javaDir}common/CreateXML.java`
+            },
+            {
+                file: 'package/common/CSVGenerator.java',
+                renameTo: generator => `${generator.javaDir}common/CSVGenerator.java`
+            },
+            {
+                file: 'package/common/CustomException.java',
+                renameTo: generator => `${generator.javaDir}common/CustomException.java`
+            },
+            {
+                file: 'package/common/DigitalSignatureBean.java',
+                renameTo: generator => `${generator.javaDir}common/DigitalSignatureBean.java`
+            },
+            {
+                file: 'package/common/FileOperation.java',
+                renameTo: generator => `${generator.javaDir}common/FileOperation.java`
+            },
+            {
+                file: 'package/common/FileUtility.java',
+                renameTo: generator => `${generator.javaDir}common/FileUtility.java`
+            },
+            
+            {
+                file: 'package/common/PDFGenerator.java',
+                renameTo: generator => `${generator.javaDir}common/PDFGenerator.java`
+            },
+            {
+                file: 'package/common/ReportData.java',
+                renameTo: generator => `${generator.javaDir}common/ReportData.java`
+            },
+            {
+                file: 'package/common/ReportFileType.java',
+                renameTo: generator => `${generator.javaDir}common/ReportFileType.java`
+            },
+            {
+                file: 'package/common/ReportGenerator.java',
+                renameTo: generator => `${generator.javaDir}common/ReportGenerator.java`
+            },
+            
+            {
+                file: 'package/common/XLSGeneretorLocal.java',
+                renameTo: generator => `${generator.javaDir}common/XLSGeneretorLocal.java`
+            }
+            
+           // 'package/common/Constants.java',
+        //    'package/common/CreateXML.java',
+           // 'package/common/CSVGenerator.java',
+         //   'package/common/CustomException.java',
+           // 'package/common/DigitalSignatureBean.java',
+           // 'package/common/PDFGenerator.java',
+         //   'package/common/ReportData.java',
+            //'package/common/ReportFileType.java',
+           // 'package/common/ReportGenerator.java',
+          //  'package/common/XLSGeneretorLocal.java',
+    
+    ]
+    }
+],
+
     docker: [
         {
             path: DOCKER_DIR,
@@ -234,7 +306,9 @@ const serverFiles = {
                 'config/application-dev.yml',
                 'config/application-tls.yml',
                 'config/application-prod.yml',
-                'i18n/messages.properties'
+                'i18n/messages.properties',
+                'sun_logo.jpg',
+                'default-report.xsl'
             ]
         },
         {

@@ -77,6 +77,28 @@ export class <%= entityAngularName %>Service {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
     }
 
+
+    exportReport(type: string, req?: any): Observable<any> {
+        return Observable.create(
+            (observer) => {
+                const options = createRequestOption(req);
+                this.http.get(this.resourceUrl + '?exportType=' + type.toLowerCase(), {
+                    params: options,
+                    observe: 'response',
+                    responseType: 'blob'
+                }).subscribe(
+                    (response) => {
+                        observer.next(response);
+                        observer.complete();
+                    },
+                    (error) => {
+                        observer.error(error);
+                        observer.complete();
+                    }
+                    );
+                });
+    }
+
     <%_ if (searchEngine === 'elasticsearch') { _%>
     search(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);

@@ -19,7 +19,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { QueryParamsStateService } from 'app/shared/util/query-params-state';
-import { ObservableUnsubscriptionUtilities } from 'app/shared/util/observable-unsubscription-utils';
 import { HttpErrorResponse, <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,8 +32,10 @@ import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { AccountService } from 'app/core';
 <%_ if (pagination !== 'no') { %>
-import {ExportType,PageData} from 'app/shared'
+import {ExportType,PageData} from 'app/shared';
+import { ObservableUnsubscriptionUtilities } from 'app/shared/util/observable-unsubscription-utils';
 import { ITEMS_PER_PAGE } from 'app/shared';
+import * as FileSaver from 'file-saver';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 @Component({
@@ -128,7 +129,21 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
     }
 
     onExportClicked(exportType: ExportType, ) {
+        this.onExportClick(exportType, 'SUN-Report.'); 
     }
+
+    onExportClick(exportType: ExportType, reportName: string) {
+        // const { currentPage, itemsPerPage } = this.pageData;
+         //this.spinner.spin(true);
+         console.log("inside export"+exportType);
+         this.<%= entityInstance %>Service.exportReport(exportType).pipe(ObservableUnsubscriptionUtilities.untilComponentDestroyed(this)).subscribe((file) => {
+             FileSaver.saveAs(new Blob([file.body], { type: exportType.toLowerCase() }), reportName + (exportType === 'XLS' ? 'xlsx' : exportType.toLowerCase()));
+             //this.spinner.spin(false);
+         },
+             (error) => {
+                 //this.spinner.spin(false);
+             });
+     }
 
     trackId(index: number, item: I<%= entityAngularName %>) {
         return item.id;
