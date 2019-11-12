@@ -18,6 +18,9 @@
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
+<%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
+    import { DateUtils } from './../../shared/util/date-utils';
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { JhiLanguageHelper } from 'app/core';
@@ -51,6 +54,11 @@ const ENTITY_STATES = [
         <%= entityAngularName %>ListComponent,
         <%= entityAngularName %>UpdateComponent,
     ],
+    <%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
+        providers: [
+        DateUtils
+    ],
+    <%_ } _%>
     <%_ if (enableTranslation) { _%>
     providers: [ { provide: JhiLanguageService, useClass: JhiLanguageService } ],
     <%_ } _%>

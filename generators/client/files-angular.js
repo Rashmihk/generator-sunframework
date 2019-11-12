@@ -384,6 +384,7 @@ const files = {
                 'shared/alert/alert-error.component.ts',
                 // dates
                 'shared/util/datepicker-adapter.ts',
+                'shared/util/date-utils.ts',
                 // form
                 'shared/component/form/form.component.html',
                 'shared/component/form/form.component.ts',

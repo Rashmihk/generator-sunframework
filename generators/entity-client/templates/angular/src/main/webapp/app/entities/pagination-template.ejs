@@ -46,6 +46,9 @@
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: JhiDataUtils,
         <%_ } _%>
+        <%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
+            protected dateUtils: DateUtils,
+        <%_ } _%>
         protected router: Router,
         protected eventManager: JhiEventManager
     ) {

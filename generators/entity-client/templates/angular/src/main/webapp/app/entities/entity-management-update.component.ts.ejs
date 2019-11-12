@@ -34,6 +34,7 @@ import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
     <%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import { DateUtils } from './../../shared/util/date-utils';
     <%_ } _%>
 <%_ } _%>
 <%_ if (queries && queries.length > 0 || fieldsContainBlob) { _%>
@@ -149,6 +150,9 @@ panelTitle: String = '';
 }); _%>
 <%_ if (fieldsContainImageBlob) { _%>
         protected elementRef: ElementRef,
+<%_ } _%>
+<%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
+        protected dateUtils: DateUtils,
 <%_ } _%>
         protected activatedRoute: ActivatedRoute,
         private fb: FormBuilder,

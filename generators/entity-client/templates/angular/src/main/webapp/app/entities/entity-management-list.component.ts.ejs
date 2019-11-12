@@ -31,6 +31,9 @@ import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { AccountService } from 'app/core';
+<%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
+    import { DateUtils } from './../../shared/util/date-utils';
+<%_ } _%>
 <%_ if (pagination !== 'no') { %>
 import {ExportType,PageData} from 'app/shared';
 import { ObservableUnsubscriptionUtilities } from 'app/shared/util/observable-unsubscription-utils';
