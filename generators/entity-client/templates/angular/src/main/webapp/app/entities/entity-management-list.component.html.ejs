@@ -39,7 +39,7 @@
 
     <fhlbny-panel headerTitle="<%= entityClassHumanized %>">
             <ng-template #additionalHeaderContent>
-                    <div class="d-flex">
+                    <div class="d-flex mr-2">
                         <form class="d-none d-lg-block form-inline mr-2" [formGroup]="pageSizeSelectionForm">
                             Show
                             <select [compareWith]="compareFn" class="form-control form-control-sm mx-2" id="sel_pageSize" formControlName="pageSizeSelector">
@@ -47,7 +47,7 @@
                             </select>
                             entries
                         </form>
-                        <fhlbny-export-controls (onExport)="onExportClicked($event)"></fhlbny-export-controls>
+                        <fhlbny-export-controls class="d-flex justify-content-end" (onExport)="onExportClicked($event)"></fhlbny-export-controls>
                         <div class="d-none d-lg-block ml-2">
                             <button type="button" id="btn_refresh" class="btn btn-secondary" (click)="reset()">
                                 <fa-icon [icon]="'sync'"></fa-icon> Refresh
@@ -56,7 +56,7 @@
                                 <fa-icon [icon]="'plus'"></fa-icon> Add
                             </button>
                         </div>
-                        <div class="d-block d-lg-none ml-2">
+                        <div class="d-block d-lg-none ml-2 position-absolute" style="right: 10px">
                             <button  class="border-right border-left" type="button" id="btn_refresh" (click)="reset()">
                                 <fa-icon [icon]="'sync'"></fa-icon>
                             </button>
