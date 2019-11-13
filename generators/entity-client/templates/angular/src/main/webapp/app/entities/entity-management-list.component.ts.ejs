@@ -79,7 +79,7 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
         this.breadcrumb = {
             home: 'Home',
             menu: 'Entities',
-            entity: '<%= entityUrl %>',
+            entity: '<%= entityClassHumanized %>',
         };
         this.loadAll();
         this.accountService.identity().then((account) => {
