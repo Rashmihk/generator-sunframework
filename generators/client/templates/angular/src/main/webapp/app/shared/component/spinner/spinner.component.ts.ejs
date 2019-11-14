@@ -31,7 +31,6 @@ export class SpinnerComponent implements OnInit {
          * Subscribes to getSpinner to get the current status of the spinner
          */
         this.spinnerService.getSpinner().subscribe(
-        
             (isShown: boolean) => {
                 this.isShown = isShown;
                 this.cdr.detectChanges();

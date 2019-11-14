@@ -6,21 +6,19 @@ import { CommonModule } from '@angular/common';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 // --------------------------------------- //
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { SpinnerComponent } from './spinner.component';
 import { SpinnerService } from './spinner.service';
 
 @NgModule({
     imports: [
-        CommonModule,
-        FontAwesomeModule
+        CommonModule
     ],
     declarations: [
         SpinnerComponent
     ],
     exports: [
-        SpinnerComponent,
-        FontAwesomeModule
+        SpinnerComponent
     ],
     entryComponents: [
     ]

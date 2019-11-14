@@ -68,7 +68,8 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= 
         }
     }
 }); _%>
-import { FormType,SpinnerService } from 'app/shared';
+import { FormType } from 'app/shared';
+import { SpinnerService } from 'app/shared/component/spinner';
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
     templateUrl: './<%= entityFileName %>-update.component.html'
