@@ -69,6 +69,7 @@
     }
 
     loadAll() {
+        this.spinner.spin(true);
         <%_ if (searchEngine === 'elasticsearch') { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
