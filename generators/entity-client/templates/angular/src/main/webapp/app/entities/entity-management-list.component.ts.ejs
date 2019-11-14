@@ -138,13 +138,13 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
 
     onExportClick(exportType: ExportType, reportName: string) {
         // const { currentPage, itemsPerPage } = this.pageData;
-         //this.spinner.spin(true);
+         this.spinner.spin(true);
          this.<%= entityInstance %>Service.exportReport(exportType).pipe(ObservableUnsubscriptionUtilities.untilComponentDestroyed(this)).subscribe((file) => {
              FileSaver.saveAs(new Blob([file.body], { type: exportType.toLowerCase() }), reportName + (exportType === 'XLS' ? 'xlsx' : exportType.toLowerCase()));
-             //this.spinner.spin(false);
+             this.spinner.spin(false);
          },
              (error) => {
-                 //this.spinner.spin(false);
+                 this.spinner.spin(false);
              });
      }
 
@@ -185,6 +185,7 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
 
     protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[], headers: HttpHeaders) {
         <%_ if (databaseType !== 'cassandra') { _%>
+        this.spinner.spin(false);
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         <%_ } _%>
@@ -193,6 +194,7 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
         <%_ } else if (pagination === 'infinite-scroll') { _%>
 
     protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[], headers: HttpHeaders) {
+        this.spinner.spin(false);
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
@@ -202,6 +204,7 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
     <%_ }} _%>
 
     protected onError(errorMessage: string) {
+        this.spinner.spin(false);
         this.jhiAlertService.error(errorMessage, null, null);
     }
     onSearchSubmit(searchObject: object) {
