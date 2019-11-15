@@ -139,7 +139,10 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
     onExportClick(exportType: ExportType, reportName: string) {
         // const { currentPage, itemsPerPage } = this.pageData;
          this.spinner.spin(true);
-         this.<%= entityInstance %>Service.exportReport(exportType).pipe(ObservableUnsubscriptionUtilities.untilComponentDestroyed(this)).subscribe((file) => {
+         this.<%= entityInstance %>Service.exportReport(exportType,{
+            sort:this.sort(),
+            ...this.searchObject
+         }).pipe(ObservableUnsubscriptionUtilities.untilComponentDestroyed(this)).subscribe((file) => {
              FileSaver.saveAs(new Blob([file.body], { type: exportType.toLowerCase() }), reportName + (exportType === 'XLS' ? 'xlsx' : exportType.toLowerCase()));
              this.spinner.spin(false);
          },
@@ -150,7 +153,7 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
 
     trackId(index: number, item: I<%= entityAngularName %>) {
         return item.id;
-    }
+    }sort
     <%_ if (fieldsContainBlob) { _%>
 
     byteSize(field) {
