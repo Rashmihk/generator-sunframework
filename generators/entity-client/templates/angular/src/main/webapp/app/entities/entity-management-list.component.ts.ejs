@@ -40,6 +40,8 @@ import {ExportType,PageData} from 'app/shared';
 import { ObservableUnsubscriptionUtilities } from 'app/shared/util/observable-unsubscription-utils';
 import { ITEMS_PER_PAGE } from 'app/shared';
 import * as FileSaver from 'file-saver';
+import { DatePipe } from '@angular/common';
+
 <%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 @Component({
@@ -244,7 +246,7 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
             const fieldType = fields[idx].fieldType;_%>
         <%_ if (fieldType === 'LocalDate') { _%> 
         if (this.searchFilterForm.value['<%= fieldName %>']) {
-            searchObject[`<%= fieldName %>.equals`] = this.jhiDateUtils.convertLocalDateToServer(this.searchFilterForm.value['<%= fieldName %>']);
+            searchObject[`<%= fieldName %>.contains`] = this.datePipe.transform(this.searchFilterForm.value['<%= fieldName %>'],'yyyy-MM-dd');
         }
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
         if (this.searchFilterForm.value['<%= fieldName %>']) {

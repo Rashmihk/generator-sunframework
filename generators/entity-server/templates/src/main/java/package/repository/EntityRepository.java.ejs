@@ -19,6 +19,8 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.<%=asEntity(entityClass)%>;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -102,5 +104,8 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
     Optional<<%=asEntity(entityClass)%>> findOneWithEagerRelationships(<%= pkType %> id);
     <%_ }
     } _%>
+  
+    @Query(value = "SELECT <%= entityInstance %> From <%= asEntity(entityClass) %> <%= entityInstance %> WHERE format(cast(<%= entityInstance %>.date as date),'yyyy-MM-dd hh:mm:ss:ms') =  format(cast(?1 as date),'yyyy-MM-dd hh:mm:ss:ms')")
+	Page<<%=asEntity(entityClass)%>> get<%= entityClass %>Date(String date, Pageable page);
 
 }

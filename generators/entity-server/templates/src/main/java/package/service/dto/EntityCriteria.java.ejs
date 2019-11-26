@@ -43,9 +43,11 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;
       if (field.fieldIsEnum == true) {
         filterType = fieldType + 'Filter';
         extraFilters[fieldType] = {type: filterType, superType: 'Filter<' + fieldType + '>', fieldType: fieldType};
-      } else if (['Duration', 'UUID', 'LocalDate', 'ZonedDateTime', 'Instant', 'String', 'Long', 'Integer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType)) {
+      } else if (['Duration', 'UUID', 'Instant', 'String', 'Long', 'Integer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType)) {
         filterType = fieldType + 'Filter';
-      } else {
+     } else if  (['LocalDate', 'ZonedDateTime'].includes(fieldType)) {
+        filterType = 'String' + 'Filter';
+      }  else {
         filterType = 'Filter<' + fieldType + '>';
       }
       filterVariables.push( { filterType : filterType,

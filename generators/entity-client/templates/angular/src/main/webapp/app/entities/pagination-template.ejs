@@ -45,11 +45,12 @@
         protected accountService: AccountService,
         protected activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
-        protected dataUtils: JhiDataUtils,
+            protected datePipe: DatePipe,
         <%_ } _%>
-        <%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
-            protected dateUtils: DateUtils,
+        <%_ if ( fieldsContainZonedDateTime ||  fieldsContainLocalDate ) { _%>
+            protected datePipe: DatePipe,
         <%_ } _%>
+       
         protected router: Router,
         protected eventManager: JhiEventManager
     ) {

@@ -42,7 +42,7 @@
                     <div class="d-flex mr-2">
                         <form class="d-none d-lg-block form-inline mr-2" [formGroup]="pageSizeSelectionForm">
                             Show
-                            <select [compareWith]="compareFn" class="form-control form-control-sm mx-2" id="sel_pageSize" formControlName="pageSizeSelector">
+                            <select class="form-control form-control-sm mx-2" id="sel_pageSize" formControlName="pageSizeSelector">
                                 <option *ngFor="let pageSize of availablePageSizes" [ngValue]="pageSize">{{pageSize}}</option>
                             </select>
                             entries
