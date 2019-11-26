@@ -244,11 +244,11 @@ export class <%= entityAngularName %>ListComponent implements OnInit, OnDestroy 
         <%_ for (idx in fields) {
             const fieldName = fields[idx].fieldName;
             const fieldType = fields[idx].fieldType;_%>
-        <%_ if (fieldType === 'LocalDate') { _%> 
+        <%_ if (fieldType === 'LocalDate' || fieldType === 'ZonedDateTime') { _%> 
         if (this.searchFilterForm.value['<%= fieldName %>']) {
             searchObject[`<%= fieldName %>.contains`] = this.datePipe.transform(this.searchFilterForm.value['<%= fieldName %>'],'yyyy-MM-dd');
         }
-        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+        <%_ } else if (['Instant'].includes(fieldType)) { _%>
         if (this.searchFilterForm.value['<%= fieldName %>']) {
             searchObject[`<%= fieldName %>.equals`] = this.dateUtils.toIsoString(this.searchFilterForm.value['<%= fieldName %>']);
         }
